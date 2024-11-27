@@ -9,9 +9,13 @@ app  = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = ['http://localhost:3000', "https://decrontab.vercel.app/"],
+    allow_origins = [
+        'http://localhost:3000',
+        "https://decrontab.vercel.app",  # Remove trailing slash
+        "https://backend-decrontab.onrender.com"  # Add your Render URL when you get it
+    ],
     allow_credentials = True,
-    allow_methods = ["POST"],
+    allow_methods = ["POST", "GET"],  # Added GET for presets endpoint
     allow_headers = ["*"]
 )
 
@@ -97,3 +101,8 @@ async def get_presets():
             }
         ]
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
